@@ -31,6 +31,7 @@ void print_list(){
         printf("%s\n", dent->d_name);
     }
 
+    free(cwd);
     closedir(dp);
 }
 
@@ -108,12 +109,14 @@ void print_sort_list(char* a){
         long long size = statbuf.st_size;
         int time = statbuf.st_ctime;
         enum TYPE type;
-        if (S_ISREG(statbuf.st_mode)) {
-            type = NORMAL;
+        printf("%s %d\n",dent->d_name, statbuf.st_mode);
+
+        if (S_ISLNK(statbuf.st_mode)) {
+            type = LINK;
         } else if (S_ISDIR(statbuf.st_mode)) {
             type = DIRR;
-        } else if (S_ISLNK(statbuf.st_mode)) {
-            type = LINK;
+        } else if (S_ISREG(statbuf.st_mode)) {
+            type = NORMAL;
         } else if (S_ISCHR(statbuf.st_mode)) {
             type = C_DEV;
         } else if (S_ISBLK(statbuf.st_mode)) {
@@ -154,6 +157,8 @@ void print_sort_list(char* a){
     for(int i=0; i<size; i++){
         print_content(&(contents[i]));
     }
+
+    free(cwd);
 }
 
 void print_sub_dir(){
