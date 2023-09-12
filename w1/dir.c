@@ -110,7 +110,7 @@ void print_sort_list(char* a){
     while((dent=readdir(dp))){
         stat(dent->d_name, &statbuf);
         enum TYPE type;
-        printf("%s %d\n",dent->d_name, statbuf.st_mode);
+        printf("%s %o\n",dent->d_name, statbuf.st_mode);
 
         if (S_ISLNK(statbuf.st_mode)) {
             type = LINK;
