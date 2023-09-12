@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "errno.h": "c",
+        "types.h": "c",
+        "unistd.h": "c",
+        "stat.h": "c",
+        "stdlib.h": "c",
+        "dirent.h": "c",
+        "dir.h": "c",
+        "stdio.h": "c",
+        "typeinfo": "c",
+        "type_traits": "c",
+        "string.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}
