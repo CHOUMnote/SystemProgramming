@@ -9,9 +9,9 @@ void print_sort_list(char*);
 enum TYPE {DIRR=1, LINK, C_DEV, B_DEV, NORMAL, MISSING};
 struct Content{
     char* name;
-    long long size;
+    long size;
     enum TYPE type;
-    int time;
+    long time;
 };
 
 void print_content(struct Content*);

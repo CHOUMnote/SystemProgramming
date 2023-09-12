@@ -61,7 +61,7 @@ void print_content(struct Content* a){
             exit(1);
             break;
     }
-    printf("%-15s %-15lld %-15d %-15s\n",a->name, a->size, a->time, t);
+    printf("%-15s %-15ld %-15ld %-15s\n",a->name, a->size, a->time, t);
 }
 
 int compareByName(const void *a, const void *b) {
@@ -100,14 +100,15 @@ void print_sort_list(char* a){
     }
     rewinddir(dp);
 
-    struct Content contents[size];
-
+    struct Content *contents = (struct Content *)malloc(size * sizeof(struct Content));
+    if(contents==NULL){
+        printf("alloc error\n");
+        exit(1);
+    }
+    
     int n=0;
     while((dent=readdir(dp))){
         stat(dent->d_name, &statbuf);
-        char* name = dent->d_name;
-        long long size = statbuf.st_size;
-        int time = statbuf.st_ctime;
         enum TYPE type;
         printf("%s %d\n",dent->d_name, statbuf.st_mode);
 
@@ -124,10 +125,10 @@ void print_sort_list(char* a){
         } else {
             type = MISSING;
         }
-        contents[n].name = name;
-        contents[n].size = size;
+        contents[n].name = strdup(dent->d_name);
+        contents[n].size = statbuf.st_size;
         contents[n].type = type;
-        contents[n].time = time;
+        contents[n].time = statbuf.st_ctime;
         n++;
     }
 
@@ -150,14 +151,20 @@ void print_sort_list(char* a){
     }
     else{
         printf("해당 데이터로 정렬할 수 없습니다\n");
+        free(cwd);
+        for(int i=0; i<size; i++)
+            free(contents[i].name);
+        free(contents);
         exit(1);
     }
 
     printf("%-15s %-15s %-15s %-3s\n", "NAME", "SIZE", "TIME", "TYPE");
     for(int i=0; i<size; i++){
         print_content(&(contents[i]));
+        free(contents[i].name);
     }
-
+    
+    free(contents);
     free(cwd);
 }
 
