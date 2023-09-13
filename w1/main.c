@@ -11,7 +11,7 @@ int main(int argc, char* argv[]){
     int n;
     char* a;
 
-    while((n=getopt(argc,argv,"hls:r")) != -1){
+    while((n=getopt(argc,argv,"hls:rD")) != -1){
         switch (n){
             case 'h':
                 H_MOD = 1;
@@ -26,6 +26,9 @@ int main(int argc, char* argv[]){
                 break;
             case 'r':
                 R_MOD = 1;
+                break;
+            case 'D':
+                debug();
                 break;
             case '?':
                 print_error();

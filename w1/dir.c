@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <string.h> 
+#include <sys/types.h>
 #include <sys/stat.h>
 
 #include "dir.h"
@@ -37,6 +38,7 @@ void print_list(){
 
 void print_error(){
     printf("에러!\n");
+    exit(1);
 }
 
 void print_content(struct Content* a){
@@ -110,25 +112,36 @@ void print_sort_list(char* a){
     while((dent=readdir(dp))){
         stat(dent->d_name, &statbuf);
         enum TYPE type;
-        printf("%s %d\n",dent->d_name, statbuf.st_mode);
-
-        if (S_ISLNK(statbuf.st_mode)) {
-            type = LINK;
-        } else if (S_ISDIR(statbuf.st_mode)) {
+        if(dent->d_type == 4){  //dir
             type = DIRR;
-        } else if (S_ISREG(statbuf.st_mode)) {
+        }else if(dent->d_type == 8){
             type = NORMAL;
-        } else if (S_ISCHR(statbuf.st_mode)) {
+        }else if(dent->d_type == 10){
+            type = LINK;
+        }else if(dent->d_type == 2){
             type = C_DEV;
-        } else if (S_ISBLK(statbuf.st_mode)) {
+        }else if(dent->d_type == 6){
             type = B_DEV;
-        } else {
+        }else{
             type = MISSING;
         }
+        // if (S_ISLNK(statbuf.st_mode)) {
+        //     type = LINK;
+        // } else if (S_ISDIR(statbuf.st_mode)) {
+        //     type = DIRR;
+        // } else if (S_ISREG(statbuf.st_mode)) {
+        //     type = NORMAL;
+        // } else if (S_ISCHR(statbuf.st_mode)) {
+        //     type = C_DEV;
+        // } else if (S_ISBLK(statbuf.st_mode)) {
+        //     type = B_DEV;
+        // } else {
+        //     type = MISSING;
+        // }
         contents[n].name = strdup(dent->d_name);
         contents[n].size = statbuf.st_size;
         contents[n].type = type;
-        contents[n].time = statbuf.st_ctime;
+        contents[n].time = statbuf.st_mtime;
         n++;
     }
 
@@ -195,6 +208,16 @@ void print_sub_dir(){
     }
 
     closedir(dp);
+}
+
+void debug(){
+    DIR *dp = opendir(".");
+    struct dirent* dent;
+    struct stat statbuf;
+    while((dent=readdir(dp))){
+        stat(dent->d_name, &statbuf);
+        printf("%s %d %d\n",dent->d_name, statbuf.st_mode, dent->d_type);
+    }
 }
 
 void ignite(){

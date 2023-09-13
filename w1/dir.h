@@ -18,4 +18,6 @@ void print_content(struct Content*);
 
 void print_sub_dir();
 
+void debug();
+
 void ignite();
