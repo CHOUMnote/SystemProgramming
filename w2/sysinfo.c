@@ -12,7 +12,7 @@ struct DISK_INFO disk_info[10];
 struct DEV_INFO dev_info;
 struct NET_INFO net_info[10];
 struct TCP_INFO tcp_info[20];
-struct PROC_INFO proc_info[100];
+struct PROC_INFO proc_info[1024];
 struct STAT_INFO stat_info;
 
 int disk_count = 0;
@@ -416,6 +416,7 @@ void proc_init(){
         if(!strcmp(buf, dent->d_name)){ //파일 검증
             strcpy(proc_info[proc_count].name, dent->d_name);
             proc_count++;
+            if(proc_count > 1022) break;
         }
     }
     closedir(dir);
