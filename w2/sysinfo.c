@@ -275,7 +275,8 @@ void net_init(){
     while (fgets(line, sizeof(line), dev)) {
         char name[32];
         unsigned long r_bytes, r_packets, t_bytes, t_packets;
-        if (sscanf(line, "%s %lu %lu %*d %*d %*d %*d %*d %*d %lu %lu", name, &r_bytes, &r_packets, &t_bytes, &t_packets) == 5) {
+        if (sscanf(line, "%s %lu %lu %*d %*d %*d %*d %*d %*d %lu %lu",
+                                    name, &r_bytes, &r_packets, &t_bytes, &t_packets) == 5) {
             strncpy(net_info[net_count].name, name, sizeof(name));
             net_info[net_count].r_byte = r_bytes;
             net_info[net_count].r_packet = r_packets;
@@ -414,7 +415,7 @@ void proc_init(){
         char buf[256];
         sprintf(buf,"%d",is_p);
         if(!strcmp(buf, dent->d_name)){ //파일 검증
-            strcpy(proc_info[proc_count].name, dent->d_name);
+              strcpy(proc_info[proc_count].name, dent->d_name);
             proc_count++;
             if(proc_count > 1022) break;
         }
@@ -430,5 +431,4 @@ void proc_init(){
         }
     }
     qsort(proc_info, proc_count, sizeof(struct PROC_INFO), compareByPID);
-
 }
